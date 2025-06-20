@@ -1,0 +1,20 @@
+import wollok.game.*
+import jugador.*
+program boulder {
+	game.title("prueba")
+	game.addVisual(personaje)
+
+	game.height(14)
+	game.width(30)
+	config.configurarTeclas()
+
+	[3,4,5,6].forEach({x =>
+    [3,4,5,6].forEach({y =>
+      const tierra = new Tierra(position = game.at(x, y))
+      game.addVisual(tierra)
+    })
+  })
+
+
+	game.start()
+}
