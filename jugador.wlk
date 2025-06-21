@@ -2,7 +2,7 @@ object personaje {
   var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
   method image() = "personajePrueba.png"
-
+  
 
   method irEn(unaDireccion) {
     direccion = unaDireccion
@@ -21,8 +21,8 @@ object personaje {
       } 
   }} 
     else if (self.esPosicionValida(nuevaPosicion)) {
-    position = nuevaPosicion
-    self.eliminarTierraEn(nuevaPosicion)
+      position = nuevaPosicion
+      self.eliminarTierraEn(nuevaPosicion)
   }
 }
 
@@ -31,8 +31,8 @@ object personaje {
   }
 
   method esPosicionValida(pos) {
-  return pos.x() >= 0 and pos.x() < 30 and pos.y() >= 0 and pos.y() < 14 and 
-    game.getObjectsIn(pos).all({o => o.kindName() == "a Tierra"})
+    return pos.x() >= 0 and pos.x() < 30 and pos.y() >= 0 and pos.y() < 14 and 
+      game.getObjectsIn(pos).all({o => o.kindName() == "a Tierra"})
 }
 }
 
@@ -45,6 +45,8 @@ class Tierra {
 
 class Piedra {
   var property position
+  var enCaida = false
+
   method position() = position
   method image() = "piedraPrueba.png"
 
@@ -57,12 +59,44 @@ class Piedra {
 
   method caerSiPuede() {
     const abajo = position.down(1)
-    if (abajo.y() < 14 and game.getObjectsIn(abajo).isEmpty()) {
-      position = abajo
+    const objetosAbajo = game.getObjectsIn(abajo)
+
+    if (abajo.y() < 14) {
+      if (objetosAbajo.isEmpty()) {
+        position = abajo
+        enCaida = true
+      } else if (objetosAbajo.any({o => o == personaje})) {
+        if (enCaida) {
+          mundo.explotarEn(abajo)
+          game.removeVisual(personaje)
+        }
+        // Si hay jugador justo debajo y no estaba cayendo, entonces se queda quieta
+        enCaida = false
+      } else {
+        // Si encuentra algo solido (piedra, ladrillo, tierra): considera resbalamiento
+        enCaida = false
+
+        const izquierdaLado = position.left(1)
+        const izquierdaAbajo = izquierdaLado.down(1)
+        const derechaLado = position.right(1)
+        const derechaAbajo = derechaLado.down(1)
+
+        const puedeResbalarIzq = izquierdaAbajo.y() < 14 and game.getObjectsIn(izquierdaLado).isEmpty() and game.getObjectsIn(izquierdaAbajo).isEmpty()
+
+        const puedeResbalarDer = derechaAbajo.y() < 14 and game.getObjectsIn(derechaLado).isEmpty() and game.getObjectsIn(derechaAbajo).isEmpty()
+
+        if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o == personaje})) {
+          position = izquierdaAbajo
+          enCaida = true
+        } else if (puedeResbalarDer and !game.getObjectsIn(derechaAbajo).any({o => o == personaje})) {
+          position = derechaAbajo
+          enCaida = true
+        }
     }
   }
 }
-
+}
+                               
 class Ladrillo {
   var property position
   method position() = position
@@ -78,6 +112,20 @@ object mundo {
 
   method aplicarGravedad() {
     piedras.forEach({p => p.caerSiPuede()})
+  }
+
+  method explotarEn(pos) {
+    const x0 = pos.x()
+    const y0 = pos.y()
+
+    [-1, 0, 1].forEach({dx =>
+      [-1, 0, 1].forEach({dy =>
+        const posAEliminar = game.at(x0 + dx, y0 + dy)
+        game.getObjectsIn(posAEliminar)
+          .filter({o => o.kindName() == "a Tierra"})
+          .forEach({t => game.removeVisual(t)})
+      })
+    })
   }
 }
 
