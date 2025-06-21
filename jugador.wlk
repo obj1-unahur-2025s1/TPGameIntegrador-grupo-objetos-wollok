@@ -1,8 +1,8 @@
 object personaje {
-  var position = game.at(0, 0)
+  var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
   method image() = "personajePrueba.png"
-  method position() = position
+
 
   method irEn(unaDireccion) {
     direccion = unaDireccion
