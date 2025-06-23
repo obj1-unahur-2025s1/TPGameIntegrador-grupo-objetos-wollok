@@ -7,7 +7,6 @@ import mundo.*
 program boulder {
 	game.title("prueba")
 	
-
 	game.height(14)
 	game.width(30)
 	config.configurarTeclas()

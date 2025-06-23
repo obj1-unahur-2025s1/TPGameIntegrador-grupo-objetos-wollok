@@ -4,7 +4,7 @@ class Tierra {
   var property position
 
   method position() = position
-  method image() = "tierraPrueba.png"
+  method image() = "tierra.png"
 }
 
 class Piedra {
@@ -12,7 +12,7 @@ class Piedra {
   var enCaida = false
 
   method position() = position
-  method image() = "piedraPrueba.png"
+  method image() = "piedra.png"
 
   method intentarMover(dir) {
     const destino = dir.siguiente(position)
@@ -47,13 +47,9 @@ class Piedra {
           const derechaLado = position.right(1)
           const derechaAbajo = derechaLado.down(1)
 
-          const puedeResbalarIzq = izquierdaAbajo.y() < 14 and 
-                                  game.getObjectsIn(izquierdaLado).isEmpty() and 
-                                  game.getObjectsIn(izquierdaAbajo).isEmpty()
+          const puedeResbalarIzq = izquierdaAbajo.y() < 14 and game.getObjectsIn(izquierdaLado).isEmpty() and game.getObjectsIn(izquierdaAbajo).isEmpty()
 
-          const puedeResbalarDer = derechaAbajo.y() < 14 and 
-                                  game.getObjectsIn(derechaLado).isEmpty() and 
-                                  game.getObjectsIn(derechaAbajo).isEmpty()
+          const puedeResbalarDer = derechaAbajo.y() < 14 and game.getObjectsIn(derechaLado).isEmpty() and game.getObjectsIn(derechaAbajo).isEmpty()
 
           if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o == personaje})) {
             position = izquierdaAbajo
@@ -72,7 +68,7 @@ class Piedra {
 class Ladrillo {
   var property position
   method position() = position
-  method image() = "ladrilloPrueba.png"
+  method image() = "ladrillo.png"
 }
 
 class Diamante {
@@ -80,7 +76,7 @@ class Diamante {
   var enCaida = false
 
   method position() = position
-  method image() = "diamantePrueba.png"
+  method image() = "diamante.png"
 
   method caerSiPuede() {
     const abajo = position.down(1)
@@ -101,13 +97,9 @@ class Diamante {
           const derechaLado = position.right(1)
           const derechaAbajo = derechaLado.down(1)
 
-          const puedeResbalarIzq = izquierdaAbajo.y() < 14 and 
-                                  game.getObjectsIn(izquierdaLado).isEmpty() and 
-                                  game.getObjectsIn(izquierdaAbajo).isEmpty()
+          const puedeResbalarIzq = izquierdaAbajo.y() < 14 and game.getObjectsIn(izquierdaLado).isEmpty() and game.getObjectsIn(izquierdaAbajo).isEmpty()
 
-          const puedeResbalarDer = derechaAbajo.y() < 14 and 
-                                  game.getObjectsIn(derechaLado).isEmpty() and 
-                                  game.getObjectsIn(derechaAbajo).isEmpty()
+          const puedeResbalarDer = derechaAbajo.y() < 14 and game.getObjectsIn(derechaLado).isEmpty() and game.getObjectsIn(derechaAbajo).isEmpty()
 
           if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o == personaje})) {
             position = izquierdaAbajo
@@ -125,6 +117,6 @@ class Diamante {
 class Puerta {
   var property position
   method position() = position
-  method image() = "puertaPrueba.png"
+  method image() = "puerta.png"
 }
 

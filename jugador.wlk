@@ -5,7 +5,7 @@ import mundo.*
 object personaje {
   var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
-  method image() = "personajePrueba.png"
+  method image() = "jugador.png"
   
 
   method irEn(unaDireccion) {
@@ -16,7 +16,7 @@ object personaje {
     if (objetos.any({o => o.kindName() == "a Piedra"})) {
       const piedra = objetos.find({o => o.kindName() == "a Piedra"})
 
-      if (direccion == izquierda or direccion == derecha) {
+      if (direccion.esIzquierda() or direccion.esDerecha()) {
         const posPiedraDestino = direccion.siguiente(piedra.position())
 
       if (posPiedraDestino.y() < 14 and game.getObjectsIn(posPiedraDestino).isEmpty()) {
@@ -51,30 +51,39 @@ object personaje {
   }
 
   method pasarPorPuertaSiCorresponde(pos) {
-  if (mundo.puertaAbierta()) {
-    const hayPuerta = game.getObjectsIn(pos).any({o => o.kindName() == "a Puerta"})
-    if (hayPuerta) {
-      mundo.pasarDeNivel()
-      }
+  if (mundo.puertaAbierta() and game.getObjectsIn(pos).any({o => o.kindName() == "a Puerta"} )) {
+    mundo.pasarDeNivel() 
     }
   }
-
 }
 
 
+// Posiciones.
 object izquierda {
   method siguiente(pos) = pos.left(1)
+
+  method esIzquierda() = true
+  method esDerecha() = false
 }
 
 object derecha {
   method siguiente(pos) = pos.right(1)
+
+  method esIzquierda() = false
+  method esDerecha() = true
 }
 
 object arriba {
   method siguiente(pos) = pos.up(1)
+
+  method esIzquierda() = false
+  method esDerecha() = false
 }
 
 object abajo {
   method siguiente(pos) = pos.down(1)
+
+  method esIzquierda() = false
+  method esDerecha() = false
 }
 

@@ -9,13 +9,13 @@ object mundo {
   var property diamantesRecolectados = 0
   var property diamantesRequeridos = 0
   var property puertaAbierta = false
-  //var property siguienteNivel = null
+
   var property nivelActual = nivel1
 
   method reiniciarContador(cantidadDeDiamantes){
     diamantes.clear()
     piedras.clear()
-    diamantesTotales = 0
+    diamantesTotales = 0    
     diamantesRecolectados = 0
     puertaAbierta = false
     diamantesRequeridos = cantidadDeDiamantes
@@ -49,18 +49,21 @@ object mundo {
   }
 
   method explotarEn(pos) {
-    const x0 = pos.x()
-    const y0 = pos.y()
+    const x = pos.x()
+    const y = pos.y()
 
-    [-1, 0, 1].forEach({dx =>
-      [-1, 0, 1].forEach({dy =>
-        const posAEliminar = game.at(x0 + dx, y0 + dy)
+    const posiciones = [
+        game.at(x - 1, y - 1), game.at(x, y - 1), game.at(x + 1, y - 1),
+        game.at(x - 1, y),     game.at(x, y),     game.at(x + 1, y),
+        game.at(x - 1, y + 1), game.at(x, y + 1), game.at(x + 1, y + 1)
+    ]
+
+    posiciones.forEach({posAEliminar =>
         game.getObjectsIn(posAEliminar)
-          .filter({o => o.kindName() == "a Tierra"})
-          .forEach({t => game.removeVisual(t)})
-      })
+        .filter({o => o.kindName() == "a Tierra"})
+        .forEach({t => game.removeVisual(t)})
     })
-  }
+}
 
   method pasarDeNivel() {
     const siguiente = self.nivelActual().nivelSiguiente()
