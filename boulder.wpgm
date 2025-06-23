@@ -10,7 +10,9 @@ program boulder {
 	game.width(30)
 	config.configurarTeclas()
 	game.addVisual(textoDiamantes)
-	nivel1.iniciar()
+	
+	mundo.nivelActual(nivel1)
+	mundo.nivelActual().iniciar()
 
 	game.onTick(500, "gravedadPiedras", {
   mundo.aplicarGravedad()

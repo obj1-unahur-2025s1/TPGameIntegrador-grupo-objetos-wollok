@@ -1,4 +1,5 @@
 import texto.*
+import niveles.*
 object personaje {
   var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
@@ -25,6 +26,7 @@ object personaje {
       position = nuevaPosicion
       self.eliminarTierraEn(nuevaPosicion)
       self.recolectarSiHayDiamanteEn(nuevaPosicion)
+      self.pasarPorPuertaSiCorresponde(nuevaPosicion)
   }
 }
 
@@ -35,7 +37,7 @@ object personaje {
   method esPosicionValida(pos) {
     return pos.x() >= 0 and pos.x() < 30 and pos.y() >= 0 and pos.y() < 14 and 
       game.getObjectsIn(pos).all({o => 
-        o.kindName() == "a Tierra" or o.kindName() == "a Diamante"
+        o.kindName() == "a Tierra" or o.kindName() == "a Diamante" or o.kindName() == "a Puerta"
       })
   }
 
@@ -44,7 +46,17 @@ object personaje {
       game.removeVisual(d)
       mundo.recolectarDiamante()
     })
-}
+  }
+
+  method pasarPorPuertaSiCorresponde(pos) {
+  if (mundo.puertaAbierta()) {
+    const hayPuerta = game.getObjectsIn(pos).any({o => o.kindName() == "a Puerta"})
+    if (hayPuerta) {
+      mundo.pasarDeNivel()
+      }
+    }
+  }
+
 }
 
 class Tierra {
@@ -86,7 +98,7 @@ class Piedra {
       } else {
         // Si encuentra algo solido (piedra, ladrillo, tierra): considera resbalamiento
         enCaida = false
-        const hayOtraPiedraDebajo = objetosAbajo.any({o => o.kindName() == "a Piedra"})
+        const hayOtraPiedraDebajo = objetosAbajo.any({o => o.kindName() == "a Piedra" or o.kindName() == "a Ladrillo"})
 
         if (hayOtraPiedraDebajo) {
           const izquierdaLado = position.left(1)
@@ -169,14 +181,32 @@ class Diamante {
 }
 }
 
+class Puerta {
+  var property position
+  method position() = position
+  method image() = "puertaPrueba.png"
+}
+
 
 object mundo {
   const property piedras = []
   const property diamantes = []
   var property diamantesTotales = 0
   var property diamantesRecolectados = 0
+  var property diamantesRequeridos = 0
   var property puertaAbierta = false
-  var property siguienteNivel = null
+  //var property siguienteNivel = null
+  var property nivelActual = nivel1
+
+  method reiniciarContador(cantidadDeDiamantes){
+    diamantes.clear()
+    piedras.clear()
+    diamantesTotales = 0
+    diamantesRecolectados = 0
+    puertaAbierta = false
+    diamantesRequeridos = cantidadDeDiamantes
+  }
+
 
   method agregarDiamante(diamante) {
     diamantes.add(diamante)
@@ -188,9 +218,11 @@ object mundo {
   game.removeVisual(textoDiamantes)
   game.addVisual(textoDiamantes)
 
-  if (diamantesRecolectados >= 2 and not puertaAbierta) {
+  if (diamantesRecolectados >= diamantesRequeridos and not puertaAbierta) {
     puertaAbierta = true
-    
+    const puerta = new Puerta(position = g.posicion())
+    game.addVisual(puerta)
+
   }}
 
   method agregarPiedra(piedra) {
@@ -215,6 +247,19 @@ object mundo {
       })
     })
   }
+
+  method pasarDeNivel() {
+    const siguiente = self.nivelActual().nivelSiguiente()
+    if (siguiente != null) {
+      game.clear()
+      nivelActual = siguiente
+      siguiente.iniciar()
+      config.configurarTeclas()
+      game.onTick(500, "gravedadPiedras", {
+        self.aplicarGravedad()
+      })
+      }
+    }
 }
 
 object config {
