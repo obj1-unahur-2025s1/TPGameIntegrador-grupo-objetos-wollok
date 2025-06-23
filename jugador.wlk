@@ -5,8 +5,12 @@ import mundo.*
 object personaje {
   var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
-  method image() = "jugador.png"
   
+  var vidas = 2
+
+
+  method image() = "jugador.png"
+  method vidas() = vidas
 
   method irEn(unaDireccion) {
     direccion = unaDireccion
@@ -55,6 +59,20 @@ object personaje {
     mundo.pasarDeNivel() 
     }
   }
+
+  method esPersonaje() = true
+
+  method perderVida() {
+    vidas -= 1
+    game.removeVisual(textoVidas)
+    game.addVisual(textoVidas)
+
+    if (vidas <= 0) {
+      mundo.finDelJuego()
+    } else {
+      mundo.reiniciarNivel()
+    }
+}
 }
 
 

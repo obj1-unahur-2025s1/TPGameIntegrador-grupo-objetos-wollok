@@ -76,5 +76,28 @@ object mundo {
         self.aplicarGravedad()
       })
       }
-    }
+
+    game.addVisual(textoDiamantes)
+    game.addVisual(textoVidas)
+  }
+
+  method finDelJuego(){
+    game.clear()
+    game.addVisual(textoGameOver)
+  }
+
+  method reiniciarNivel() {
+    game.clear()
+    self.nivelActual().iniciar()
+    config.configurarTeclas()
+    game.onTick(500, "gravedadPiedras", {
+      self.aplicarGravedad()
+    })
+
+    game.addVisual(textoDiamantes)
+    game.addVisual(textoVidas)
+  }
+
+
+    
 }

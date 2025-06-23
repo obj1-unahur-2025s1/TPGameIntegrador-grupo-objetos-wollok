@@ -10,8 +10,10 @@ program boulder {
 	game.height(14)
 	game.width(30)
 	config.configurarTeclas()
-	game.addVisual(textoDiamantes)
 	
+	game.addVisual(textoDiamantes)
+	game.addVisual(textoVidas)
+
 	mundo.nivelActual(nivel1)
 	mundo.nivelActual().iniciar()
 
