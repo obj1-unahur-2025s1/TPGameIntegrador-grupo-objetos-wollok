@@ -1,7 +1,8 @@
+import texto.*
 object personaje {
   var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
-  method image() = "jugador idle.png"
+  method image() = "personajePrueba.png"
   
 
   method irEn(unaDireccion) {
@@ -23,6 +24,7 @@ object personaje {
     else if (self.esPosicionValida(nuevaPosicion)) {
       position = nuevaPosicion
       self.eliminarTierraEn(nuevaPosicion)
+      self.recolectarSiHayDiamanteEn(nuevaPosicion)
   }
 }
 
@@ -32,7 +34,16 @@ object personaje {
 
   method esPosicionValida(pos) {
     return pos.x() >= 0 and pos.x() < 30 and pos.y() >= 0 and pos.y() < 14 and 
-      game.getObjectsIn(pos).all({o => o.kindName() == "a Tierra"})
+      game.getObjectsIn(pos).all({o => 
+        o.kindName() == "a Tierra" or o.kindName() == "a Diamante"
+      })
+  }
+
+  method recolectarSiHayDiamanteEn(pos) {
+    game.getObjectsIn(pos).filter({o => o.kindName() == "a Diamante"}).forEach({d =>
+      game.removeVisual(d)
+      mundo.recolectarDiamante()
+    })
 }
 }
 
@@ -75,23 +86,31 @@ class Piedra {
       } else {
         // Si encuentra algo solido (piedra, ladrillo, tierra): considera resbalamiento
         enCaida = false
+        const hayOtraPiedraDebajo = objetosAbajo.any({o => o.kindName() == "a Piedra"})
 
-        const izquierdaLado = position.left(1)
-        const izquierdaAbajo = izquierdaLado.down(1)
-        const derechaLado = position.right(1)
-        const derechaAbajo = derechaLado.down(1)
+        if (hayOtraPiedraDebajo) {
+          const izquierdaLado = position.left(1)
+          const izquierdaAbajo = izquierdaLado.down(1)
+          const derechaLado = position.right(1)
+          const derechaAbajo = derechaLado.down(1)
 
-        const puedeResbalarIzq = izquierdaAbajo.y() < 14 and game.getObjectsIn(izquierdaLado).isEmpty() and game.getObjectsIn(izquierdaAbajo).isEmpty()
+          const puedeResbalarIzq = izquierdaAbajo.y() < 14 and 
+                                  game.getObjectsIn(izquierdaLado).isEmpty() and 
+                                  game.getObjectsIn(izquierdaAbajo).isEmpty()
 
-        const puedeResbalarDer = derechaAbajo.y() < 14 and game.getObjectsIn(derechaLado).isEmpty() and game.getObjectsIn(derechaAbajo).isEmpty()
+          const puedeResbalarDer = derechaAbajo.y() < 14 and 
+                                  game.getObjectsIn(derechaLado).isEmpty() and 
+                                  game.getObjectsIn(derechaAbajo).isEmpty()
 
-        if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o == personaje})) {
-          position = izquierdaAbajo
-          enCaida = true
-        } else if (puedeResbalarDer and !game.getObjectsIn(derechaAbajo).any({o => o == personaje})) {
-          position = derechaAbajo
-          enCaida = true
+          if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o == personaje})) {
+            position = izquierdaAbajo
+            enCaida = true
+          } else if (puedeResbalarDer and !game.getObjectsIn(derechaAbajo).any({o => o == personaje})) {
+            position = derechaAbajo
+            enCaida = true
+          }
         }
+
     }
   }
 }
@@ -100,11 +119,79 @@ class Piedra {
 class Ladrillo {
   var property position
   method position() = position
-  method image() = "ladrillo.png"
+  method image() = "ladrilloPrueba.png"
 }
+
+class Diamante {
+  var property position
+  var enCaida = false
+
+  method position() = position
+  method image() = "diamantePrueba.png"
+
+  method caerSiPuede() {
+    const abajo = position.down(1)
+    const objetosAbajo = game.getObjectsIn(abajo)
+
+    if (abajo.y() < 14) {
+      if (objetosAbajo.isEmpty()) {
+        position = abajo
+        enCaida = true
+      } else {
+        enCaida = false
+
+        const hayOtroDiamanteDebajo = objetosAbajo.any({o => o.kindName() == "a Diamante"})
+
+        if (hayOtroDiamanteDebajo) {
+          const izquierdaLado = position.left(1)
+          const izquierdaAbajo = izquierdaLado.down(1)
+          const derechaLado = position.right(1)
+          const derechaAbajo = derechaLado.down(1)
+
+          const puedeResbalarIzq = izquierdaAbajo.y() < 14 and 
+                                  game.getObjectsIn(izquierdaLado).isEmpty() and 
+                                  game.getObjectsIn(izquierdaAbajo).isEmpty()
+
+          const puedeResbalarDer = derechaAbajo.y() < 14 and 
+                                  game.getObjectsIn(derechaLado).isEmpty() and 
+                                  game.getObjectsIn(derechaAbajo).isEmpty()
+
+          if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o == personaje})) {
+            position = izquierdaAbajo
+            enCaida = true
+          } else if (puedeResbalarDer and !game.getObjectsIn(derechaAbajo).any({o => o == personaje})) {
+            position = derechaAbajo
+            enCaida = true
+          }
+      }
+    }
+  }
+}
+}
+
 
 object mundo {
   const property piedras = []
+  const property diamantes = []
+  var property diamantesTotales = 0
+  var property diamantesRecolectados = 0
+  var property puertaAbierta = false
+  var property siguienteNivel = null
+
+  method agregarDiamante(diamante) {
+    diamantes.add(diamante)
+    diamantesTotales += 1
+  }
+
+  method recolectarDiamante() {
+  diamantesRecolectados += 1
+  game.removeVisual(textoDiamantes)
+  game.addVisual(textoDiamantes)
+
+  if (diamantesRecolectados >= 2 and not puertaAbierta) {
+    puertaAbierta = true
+    
+  }}
 
   method agregarPiedra(piedra) {
     piedras.add(piedra)
@@ -112,6 +199,7 @@ object mundo {
 
   method aplicarGravedad() {
     piedras.forEach({p => p.caerSiPuede()})
+    diamantes.forEach({d => d.caerSiPuede()})
   }
 
   method explotarEn(pos) {

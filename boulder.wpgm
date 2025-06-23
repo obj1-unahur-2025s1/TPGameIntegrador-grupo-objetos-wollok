@@ -1,6 +1,7 @@
 import wollok.game.*
 import jugador.*
 import niveles.*
+import texto.*
 program boulder {
 	game.title("prueba")
 	
@@ -8,7 +9,7 @@ program boulder {
 	game.height(14)
 	game.width(30)
 	config.configurarTeclas()
-
+	game.addVisual(textoDiamantes)
 	nivel1.iniciar()
 
 	game.onTick(500, "gravedadPiedras", {
