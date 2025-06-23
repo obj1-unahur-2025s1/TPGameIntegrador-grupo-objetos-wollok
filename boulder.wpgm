@@ -2,6 +2,8 @@ import wollok.game.*
 import jugador.*
 import niveles.*
 import texto.*
+import config.*
+import mundo.*
 program boulder {
 	game.title("prueba")
 	

@@ -1,5 +1,7 @@
 import wollok.game.*
 import jugador.*
+import bloques.*
+import mundo.*
 class Nivel {
   const initialGridMap
   const diamantesRequeridos
