@@ -13,7 +13,7 @@ object textoVidas {
 }
 
 object textoGameOver {
-  method position() = game.at(10, 7)
+  method position() = game.at(13, 7)
   method text() = "¡Game Over!"
   method textColor() = "FF0000"
   method fontSize() = 24

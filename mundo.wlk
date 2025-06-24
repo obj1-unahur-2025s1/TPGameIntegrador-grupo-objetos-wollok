@@ -57,7 +57,7 @@ object mundo {
         game.at(x - 1, y),     game.at(x, y),     game.at(x + 1, y),
         game.at(x - 1, y + 1), game.at(x, y + 1), game.at(x + 1, y + 1)
     ]
-
+    
     posiciones.forEach({posAEliminar =>
         game.getObjectsIn(posAEliminar)
         .filter({o => o.kindName() == "a Tierra"})
@@ -72,7 +72,7 @@ object mundo {
       nivelActual = siguiente
       siguiente.iniciar()
       config.configurarTeclas()
-      game.onTick(500, "gravedadPiedras", {
+      game.onTick(300, "gravedadPiedras", {
         self.aplicarGravedad()
       })
       }
@@ -85,12 +85,12 @@ object mundo {
     game.clear()
     game.addVisual(textoGameOver)
   }
-
+  
   method reiniciarNivel() {
     game.clear()
     self.nivelActual().iniciar()
     config.configurarTeclas()
-    game.onTick(500, "gravedadPiedras", {
+    game.onTick(300, "gravedadPiedras", {
       self.aplicarGravedad()
     })
 

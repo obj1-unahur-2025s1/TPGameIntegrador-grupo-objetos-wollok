@@ -34,13 +34,9 @@ class BloqueCaible inherits Bloque{
     const derechaLado = position.right(1)
     const derechaAbajo = derechaLado.down(1)
 
-    const puedeResbalarIzq = izquierdaAbajo.y() < 14 and
-      game.getObjectsIn(izquierdaLado).isEmpty() and
-      game.getObjectsIn(izquierdaAbajo).isEmpty()
+    const puedeResbalarIzq = izquierdaAbajo.y() < 14 and game.getObjectsIn(izquierdaLado).isEmpty() and game.getObjectsIn(izquierdaAbajo).isEmpty()
 
-    const puedeResbalarDer = derechaAbajo.y() < 14 and
-      game.getObjectsIn(derechaLado).isEmpty() and
-      game.getObjectsIn(derechaAbajo).isEmpty()
+    const puedeResbalarDer = derechaAbajo.y() < 14 and game.getObjectsIn(derechaLado).isEmpty() and game.getObjectsIn(derechaAbajo).isEmpty()
 
     if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o.esPersonaje()}))
       position = izquierdaAbajo

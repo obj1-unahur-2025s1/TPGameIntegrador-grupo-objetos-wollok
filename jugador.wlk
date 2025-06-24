@@ -2,14 +2,17 @@ import texto.*
 import niveles.*
 import bloques.*
 import mundo.*
+import config.*
+
 object personaje {
   var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
   
-  var vidas = 2
+  var vidas = 3
 
 
   method image() = "jugador.png"
+  
   method vidas() = vidas
 
   method irEn(unaDireccion) {
@@ -22,6 +25,7 @@ object personaje {
 
       if (direccion.esIzquierda() or direccion.esDerecha()) {
         const posPiedraDestino = direccion.siguiente(piedra.position())
+        
 
       if (posPiedraDestino.y() < 14 and game.getObjectsIn(posPiedraDestino).isEmpty()) {
         piedra.position(posPiedraDestino)
@@ -37,7 +41,11 @@ object personaje {
 }
 
   method eliminarTierraEn(pos) {
-    game.getObjectsIn(pos).filter({o => o.kindName() == "a Tierra"}).forEach({t => game.removeVisual(t)})
+    if(game.getObjectsIn(pos).any({o => o.kindName() == "a Tierra"})){
+      game.getObjectsIn(pos).filter({o => o.kindName() == "a Tierra"}).forEach({t => game.removeVisual(t)})
+      romperTierra.play()
+    }
+    
   }
 
   method esPosicionValida(pos) {
@@ -64,9 +72,10 @@ object personaje {
 
   method perderVida() {
     vidas -= 1
+    
     game.removeVisual(textoVidas)
     game.addVisual(textoVidas)
-
+    
     if (vidas <= 0) {
       mundo.finDelJuego()
     } else {

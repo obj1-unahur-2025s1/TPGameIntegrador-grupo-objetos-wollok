@@ -5,19 +5,22 @@ import texto.*
 import config.*
 import mundo.*
 program boulder {
+
 	game.title("prueba")
 	
 	game.height(14)
 	game.width(30)
+	game.boardGround("cueva.png")
+
 	config.configurarTeclas()
-	
+
 	game.addVisual(textoDiamantes)
 	game.addVisual(textoVidas)
 
-	mundo.nivelActual(nivel1)
+	mundo.nivelActual(prueba)
 	mundo.nivelActual().iniciar()
 
-	game.onTick(500, "gravedadPiedras", {
+	game.onTick(300, "gravedadPiedras", {
   mundo.aplicarGravedad()
 })
 
