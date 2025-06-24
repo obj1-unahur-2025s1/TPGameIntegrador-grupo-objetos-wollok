@@ -94,7 +94,8 @@ class Piedra inherits BloqueCaible {
       } else if (objetosAbajo.any({o => o.esPersonaje()})) {
         if (enCaida) {
           mundo.explotarEn(abajo)
-          personaje.perderVida()
+          game.removeVisual(personaje)
+          mundo.congelarJuego()
         }
         enCaida = false
       } else {

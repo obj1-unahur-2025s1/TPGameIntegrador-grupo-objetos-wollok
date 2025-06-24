@@ -2,6 +2,8 @@ import config.*
 import niveles.*
 import texto.*
 import bloques.*
+import jugador.*
+
 object mundo {
   const property piedras = []
   const property diamantes = []
@@ -11,6 +13,9 @@ object mundo {
   var property puertaAbierta = false
 
   var property nivelActual = nivel1
+  var juegoActivo = true
+
+  method juegoActivo() = juegoActivo 
 
   method reiniciarContador(cantidadDeDiamantes){
     diamantes.clear()
@@ -65,6 +70,22 @@ object mundo {
     })
 }
 
+  method iniciarJuego() {
+    game.clear()
+    self.nivelActual(nivel1)
+    self.nivelActual().iniciar()
+    config.configurarTeclas()
+    game.onTick(300, "gravedadPiedras", {
+      self.aplicarGravedad()
+    })
+    game.onTick(200, "animacionActual", {
+      personaje.actualizarEstado()
+    })
+    game.addVisual(textoDiamantes)
+    game.addVisual(textoVidas)
+    game.addVisual(textoReinicio)
+}
+
   method pasarDeNivel() {
     const siguiente = self.nivelActual().nivelSiguiente()
     if (siguiente != null) {
@@ -87,6 +108,7 @@ object mundo {
   }
   
   method reiniciarNivel() {
+    juegoActivo = true
     game.clear()
     self.nivelActual().iniciar()
     config.configurarTeclas()
@@ -96,8 +118,11 @@ object mundo {
 
     game.addVisual(textoDiamantes)
     game.addVisual(textoVidas)
+    game.addVisual(textoReinicio)
   }
 
-
+  method congelarJuego(){
+    juegoActivo = false
+  }
     
 }

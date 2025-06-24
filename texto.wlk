@@ -1,5 +1,13 @@
 import jugador.*
 import mundo.*
+
+object pantallaInicio {
+  method image() = "pantallaInicio.png"
+  method position() = game.at(0, 0)
+  method width() = 30
+  method height() = 14
+}
+
 object textoDiamantes {
   method position() = game.at(1, 13)
   method text() = "Diamantes: " + mundo.diamantesRecolectados().toString() + "/" + mundo.diamantesTotales().toString()
@@ -21,8 +29,15 @@ object textoGameOver {
 
 
 object textoFinal {
-  method position() = game.at(5, 7)
+  method position() = game.at(14, 7)
   method text() = "¡Felicidades! Juego completado."
   method textColor() = "00FF00"
+  method fontSize() = 40
+}
+
+object textoReinicio{
+  method position() = game.at(14, 13)
+  method text() = "Presiona R para reiniciar el nivel."
+  method textColor() = "00FF00FF"
   method fontSize() = 24
 }

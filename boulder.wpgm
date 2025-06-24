@@ -12,16 +12,11 @@ program boulder {
 	game.width(30)
 	game.boardGround("cueva.png")
 
-	config.configurarTeclas()
+	game.addVisual(pantallaInicio)
 
-	game.addVisual(textoDiamantes)
-	game.addVisual(textoVidas)
-
-	mundo.nivelActual(prueba)
-	mundo.nivelActual().iniciar()
-
-	game.onTick(300, "gravedadPiedras", {mundo.aplicarGravedad()})
-    game.onTick(200, "animacionActual", {personaje.actualizarEstado()})
+	keyboard.space().onPressDo({
+		mundo.iniciarJuego()
+	})
 
 	game.start()
 }

@@ -2,23 +2,17 @@ import jugador.*
 import mundo.*
 object config {
   method configurarTeclas() {
-    keyboard.left().onPressDo({ personaje.irEn(izquierda) })
-    keyboard.right().onPressDo({ personaje.irEn(derecha) })
-    keyboard.up().onPressDo({ personaje.irEn(arriba) })
-    keyboard.down().onPressDo({ personaje.irEn(abajo) })
-
+    keyboard.left().onPressDo({if (mundo.juegoActivo()) personaje.irEn(izquierda) })
+    keyboard.right().onPressDo({if (mundo.juegoActivo()) personaje.irEn(derecha) })
+    keyboard.up().onPressDo({if (mundo.juegoActivo()) personaje.irEn(arriba) })
+    keyboard.down().onPressDo({if (mundo.juegoActivo()) personaje.irEn(abajo) })
+    
     keyboard.r().onPressDo({personaje.perderVida()})
-    keyboard.enter().onPressDo({explosion.play()})
-
+    
+    
   }
 }
 
-object explosion {
-
-  method play(){
-    game.sound("explosion.mp3").play()
-  }
-}
 
 object romperTierra{
   method play(){

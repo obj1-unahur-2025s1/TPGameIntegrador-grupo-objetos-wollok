@@ -97,8 +97,8 @@ object personaje {
     if (vidas <= 0) {
       mundo.finDelJuego()
     } else {
-      mundo.reiniciarNivel()
-    }
+    mundo.reiniciarNivel()
+  }
 }
 }
 
