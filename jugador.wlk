@@ -7,11 +7,23 @@ import config.*
 object personaje {
   var property position = game.at(0, 0)
   var direccion = derecha  // por defecto
-  
   var vidas = 3
+  var property estaEnMovimiento = false
+  var property image = "personajeIdleDef.gif"
+  
+  method actualizarEstado() {
+    estaEnMovimiento = false
+    self.actualizarImagen()
+  }
 
-
-  method image() = "jugador.png"
+  method actualizarImagen(){
+     if(self.estaEnMovimiento()){
+      image = "personajeRunDef.gif"
+     }
+     else {
+      image = "personajeIdleDef.gif"
+     }
+  }
   
   method vidas() = vidas
 
@@ -19,6 +31,7 @@ object personaje {
     direccion = unaDireccion
     const nuevaPosicion = direccion.siguiente(position)
     const objetos = game.getObjectsIn(nuevaPosicion)
+    var huboMovimiento = false 
 
     if (objetos.any({o => o.kindName() == "a Piedra"})) {
       const piedra = objetos.find({o => o.kindName() == "a Piedra"})
@@ -30,6 +43,7 @@ object personaje {
       if (posPiedraDestino.y() < 14 and game.getObjectsIn(posPiedraDestino).isEmpty()) {
         piedra.position(posPiedraDestino)
         position = nuevaPosicion 
+        huboMovimiento = true
       } 
   }} 
     else if (self.esPosicionValida(nuevaPosicion)) {
@@ -37,7 +51,11 @@ object personaje {
       self.eliminarTierraEn(nuevaPosicion)
       self.recolectarSiHayDiamanteEn(nuevaPosicion)
       self.pasarPorPuertaSiCorresponde(nuevaPosicion)
+      huboMovimiento = true
   }
+    // cambia la animacion al moverse
+     estaEnMovimiento = huboMovimiento
+     self.actualizarImagen()
 }
 
   method eliminarTierraEn(pos) {

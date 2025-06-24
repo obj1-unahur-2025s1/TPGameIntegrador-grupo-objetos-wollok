@@ -20,9 +20,8 @@ program boulder {
 	mundo.nivelActual(prueba)
 	mundo.nivelActual().iniciar()
 
-	game.onTick(300, "gravedadPiedras", {
-  mundo.aplicarGravedad()
-})
+	game.onTick(300, "gravedadPiedras", {mundo.aplicarGravedad()})
+    game.onTick(200, "animacionActual", {personaje.actualizarEstado()})
 
 	game.start()
 }

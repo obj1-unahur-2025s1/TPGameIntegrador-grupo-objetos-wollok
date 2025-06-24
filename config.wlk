@@ -9,6 +9,7 @@ object config {
 
     keyboard.r().onPressDo({personaje.perderVida()})
     keyboard.enter().onPressDo({explosion.play()})
+
   }
 }
 
