@@ -23,3 +23,9 @@ object explosion{
     game.sound("explosion.mp3").play()
   }
 }
+
+object seQuemo {
+  method play() {
+    game.sound("quemado.mp3").play()
+  }
+}

@@ -69,7 +69,7 @@ object personaje {
   method esPosicionValida(pos) {
     return pos.x() >= 0 and pos.x() < 30 and pos.y() >= 0 and pos.y() < 14 and 
       game.getObjectsIn(pos).all({o => 
-        o.kindName() == "a Tierra" or o.kindName() == "a Diamante" or o.kindName() == "a Puerta" or o.kindName() == "a Bomba"
+        o.kindName() == "a Tierra" or o.kindName() == "a Diamante" or o.kindName() == "a Puerta" or o.kindName() == "a Bomba" or o.kindName() == "a Lava"
       })
   }
 

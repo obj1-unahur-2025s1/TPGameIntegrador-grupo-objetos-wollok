@@ -13,18 +13,25 @@ class Nivel {
   method iniciar() {
     mundo.reiniciarContador(diamantesRequeridos)
     self.dibujarMapa()
+    
+        game.whenCollideDo(personaje, { v =>
+      if (v.kindName() == "a Lava") {
+        seQuemo.play()
+        personaje.perderVida()
+      }
+    })
 
-    game.whenCollideDo(personaje, {b =>
-    if (b.kindName() == "a Bomba") {
-      explosion.play()
-      personaje.perderVida()
+    game.whenCollideDo(personaje, { b =>
+      if (b.kindName() == "a Bomba") {
+        explosion.play()
+        personaje.perderVida()
 
-    if (personaje.vidas() > 0) {
-      game.onTick(500, "reinicio", {
-        mundo.reiniciarNivel()
-      })
-    }
-    }
+        if (personaje.vidas() > 0) {
+          game.onTick(500, "reinicio", {
+            mundo.reiniciarNivel()
+          })
+        }
+      }
     })
   }
 
@@ -55,6 +62,14 @@ object t {
     game.addVisual(tierra)
   }
 }
+
+object v {
+  method decode(x, y) {
+    const lava = new Lava(position = game.at(x, y))
+    game.addVisual(lava)
+  }
+}
+
 
 object p {
   method decode(x, y) {
@@ -160,11 +175,11 @@ const nivel3 = new Nivel(
     [_,_,_,_,_,_,l,_,_,_,_,_,p,_,_,_,_,_,_,_,_,l,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,l,_,_,_,_,p,p,p,_,_,_,_,_,_,_,l,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,l,j,_,_,p,p,p,p,p,_,d,_,_,_,_,l,_,_,_,_,_,_,_,_],
-    [_,_,_,_,_,_,l,l,l,l,l,l,l,l,l,l,l,l,l,l,t,l,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,l,l,l,l,l,l,l,l,l,l,l,v,v,v,t,l,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,l,_,_,_,l,t,t,d,p,t,t,p,d,t,t,l,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,l,g,_,_,l,t,t,p,t,t,t,p,t,t,t,l,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,l,_,_,_,p,t,t,t,t,t,t,t,t,t,t,l,_,_,_,_,_,_,_,_],
-    [_,_,_,_,_,_,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,_,_,_,_,_,_,_,_]
+    [_,_,_,_,_,_,l,v,l,l,l,l,l,l,l,l,l,l,l,l,l,l,_,_,_,_,_,_,_,_]
   ], nivelSiguiente = nivel4
 )
 
@@ -181,7 +196,7 @@ const nivel4 = new Nivel(
     [_,_,_,_,_,_,_,_,l,t,t,t,l,l,t,l,l,p,p,p,l,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,l,t,t,t,l,t,t,j,l,t,t,t,l,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,l,t,t,p,l,t,p,t,l,t,t,t,l,_,_,_,_,_,_,_,_,_],
-    [_,_,_,_,_,_,_,_,l,p,p,p,l,l,t,l,l,t,t,t,l,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,_,_,l,p,v,p,l,l,t,l,l,t,t,t,l,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,l,t,t,t,t,t,t,t,p,t,t,t,l,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,l,t,g,t,d,t,t,t,p,t,d,t,l,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,l,l,l,l,l,l,l,l,l,l,l,l,l,_,_,_,_,_,_,_,_,_]
