@@ -216,7 +216,7 @@ const nivel5 = new Nivel(
     [_,_,_,_,l,_,_,_,_,t,t,t,t,_,_,_,_,t,t,_,t,v,t,t,v,l,_,_,_,_],
     [_,_,_,_,l,_,_,_,_,_,t,b,t,t,t,t,_,t,t,p,t,b,t,b,t,l,_,_,_,_],
     [_,_,_,_,l,_,_,_,_,_,t,t,t,b,t,b,t,b,t,t,b,t,t,t,t,l,_,_,_,_],
-    [_,_,_,_,l,_,_,_,_,_,_,_,_,t,t,t,b,t,b,d,t,t,b,t,d,l,_,_,_,_],
+    [_,_,_,_,l,g,_,_,_,_,_,_,_,t,t,t,b,t,b,d,t,t,b,t,d,l,_,_,_,_],
     [_,_,_,_,l,l,v,v,v,v,v,l,l,l,l,l,l,l,l,l,l,v,v,v,l,l,_,_,_,_]
   ], nivelSiguiente = final
 )
