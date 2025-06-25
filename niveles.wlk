@@ -3,6 +3,8 @@ import jugador.*
 import bloques.*
 import mundo.*
 import texto.*
+import config.*
+
 class Nivel {
   const initialGridMap
   const diamantesRequeridos
@@ -11,6 +13,19 @@ class Nivel {
   method iniciar() {
     mundo.reiniciarContador(diamantesRequeridos)
     self.dibujarMapa()
+
+    game.whenCollideDo(personaje, {b =>
+    if (b.kindName() == "a Bomba") {
+      explosion.play()
+      personaje.perderVida()
+
+    if (personaje.vidas() > 0) {
+      game.onTick(500, "reinicio", {
+        mundo.reiniciarNivel()
+      })
+    }
+    }
+    })
   }
 
 
@@ -68,6 +83,13 @@ object d {
     const diamante = new Diamante(position = game.at(x, y))
     game.addVisual(diamante)
     mundo.agregarDiamante(diamante)
+  }
+}
+
+object b {
+  method decode(x, y) {
+    const bomba = new Bomba(position = game.at(x, y))
+    game.addVisual(bomba)
   }
 }
 
@@ -163,6 +185,26 @@ const nivel4 = new Nivel(
     [_,_,_,_,_,_,_,_,l,t,t,t,t,t,t,t,p,t,t,t,l,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,l,t,g,t,d,t,t,t,p,t,d,t,l,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,l,l,l,l,l,l,l,l,l,l,l,l,l,_,_,_,_,_,_,_,_,_]
+  ], nivelSiguiente = nivel5
+)
+
+const nivel5 = new Nivel(
+  diamantesRequeridos = 3,
+  initialGridMap = [
+    [_,_,_,p,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,p,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,_,_,_,p,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,p,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,t,t,_,t,t,t,t,t,t,t,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,t,b,d,b,t,j,t,t,t,t,p,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,t,t,t,t,t,t,t,t,t,b,t,t,t,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,t,t,t,t,_,_,_,_,_,t,t,t,_,_,_,_,t,t,_,t,t,_,_,_,_,_,_,_,_],
+    [_,t,t,t,t,_,_,_,_,_,t,b,t,t,t,_,_,t,t,_,t,t,_,_,_,_,_,_,_,_],
+    [t,t,b,t,t,_,_,_,_,_,t,t,t,t,t,t,t,b,t,t,t,t,_,_,_,_,_,_,_,_],
+    [t,d,t,p,t,_,_,_,_,_,_,_,_,t,t,t,t,t,b,d,b,t,_,_,_,_,_,_,_,_],
+    [t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t]
   ], nivelSiguiente = final
 )
 

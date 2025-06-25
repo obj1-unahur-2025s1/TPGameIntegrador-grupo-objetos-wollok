@@ -62,6 +62,11 @@ class Puerta inherits Bloque {
   method image() = "puerta.png"
 }
 
+class Bomba inherits Bloque {
+
+  method image() = "bomba1.gif"
+}
+
 
 class Diamante inherits BloqueCaible{
   method image() = "diamante.png"
