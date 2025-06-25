@@ -94,7 +94,7 @@ object personaje {
     game.removeVisual(textoVidas)
     game.addVisual(textoVidas)
     
-    if (vidas <= 0) {
+    if (vidas == 0) {
       mundo.finDelJuego()
     } else {
     mundo.reiniciarNivel()

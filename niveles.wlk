@@ -14,23 +14,21 @@ class Nivel {
     mundo.reiniciarContador(diamantesRequeridos)
     self.dibujarMapa()
     
-        game.whenCollideDo(personaje, { v =>
+    game.whenCollideDo(personaje, { v =>
       if (v.kindName() == "a Lava") {
         seQuemo.play()
-        personaje.perderVida()
+        game.removeVisual(personaje)
+        mundo.congelarJuego()
       }
     })
 
     game.whenCollideDo(personaje, { b =>
       if (b.kindName() == "a Bomba") {
         explosion.play()
-        personaje.perderVida()
-
-        if (personaje.vidas() > 0) {
-          game.onTick(500, "reinicio", {
-            mundo.reiniciarNivel()
-          })
-        }
+        mundo.explotarEn(personaje.position())
+        game.removeVisual(b) 
+        game.removeVisual(personaje)
+        mundo.congelarJuego()
       }
     })
   }
@@ -224,7 +222,7 @@ const nivel5 = new Nivel(
 )
 
 const prueba = new Nivel(
-  diamantesRequeridos = 4,
+  diamantesRequeridos = 1,
   initialGridMap = [
     [_,_,_,p,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,p,_,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_,_,p,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
@@ -234,10 +232,10 @@ const prueba = new Nivel(
     [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,t,t,t,t,t,t,t,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,t,t,j,t,t,t,t,p,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
-    [_,_,_,_,_,_,_,t,t,t,t,t,t,t,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,_,t,t,t,t,t,t,t,_,_,_,_,_,_,_,_,_,_,_,_,_,d,_,_],
     [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,t,_,t,t,_,_,_,_,_,_,_,_],
-    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,t,_,t,t,_,_,_,_,_,_,_,_],
-    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,_,_,t,t,t,t,t,_,_,_,_,_,_,_,_],
+    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,t,_,t,t,_,_,_,_,_,_,g,_],
+    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,_,_,t,t,t,t,t,_,_,_,_,_,_,_,_], //Recordatorio: Insertar la puerta y que la cantidad de diamantes coincida con los diamantes requeridos
     [_,_,t,p,t,_,_,_,_,_,_,_,_,_,_,_,_,t,t,t,t,t,_,_,_,_,_,_,_,_],
     [t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t]
   ]

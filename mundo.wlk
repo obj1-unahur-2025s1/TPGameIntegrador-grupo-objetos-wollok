@@ -72,7 +72,7 @@ object mundo {
 
   method iniciarJuego() {
     game.clear()
-    self.nivelActual(nivel1)
+    
     self.nivelActual().iniciar()
     config.configurarTeclas()
     game.onTick(300, "gravedadPiedras", {
@@ -88,19 +88,20 @@ object mundo {
 
   method pasarDeNivel() {
     const siguiente = self.nivelActual().nivelSiguiente()
-    if (siguiente != null) {
+     if (siguiente != null) {
       game.clear()
       nivelActual = siguiente
       siguiente.iniciar()
       config.configurarTeclas()
-      game.onTick(300, "gravedadPiedras", {
-        self.aplicarGravedad()
-      })
-      }
-
-    game.addVisual(textoDiamantes)
-    game.addVisual(textoVidas)
-    game.addVisual(textoReinicio)
+      game.onTick(300, "gravedadPiedras", { self.aplicarGravedad() })
+      game.addVisual(textoDiamantes)
+      game.addVisual(textoVidas)
+      game.addVisual(textoReinicio)
+  } else {
+      game.clear()
+      game.addVisual(textoFinal)
+      juegoActivo = false
+  }
   }
 
   method finDelJuego(){
