@@ -10,10 +10,12 @@ Para desplazarse por el tablero, el jugador debe usar las teclas/flechas de arri
 
 ## Equipo de desarrollo
 
-Maurin, Nicolas
-Folco, Nicole
-Duce, Brandon
-Folco, Camila Belen
+-Maurin, Nicolas
+-Folco, Nicole
+-Duce, Brandon
+-Folco, Camila Belen
+
+## Información
 
 - Programación con Objetos I | Universidad de Hurlingham
 - Versión de wollok 0.3.1
