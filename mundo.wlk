@@ -100,6 +100,7 @@ object mundo {
 
     game.addVisual(textoDiamantes)
     game.addVisual(textoVidas)
+    game.addVisual(textoReinicio)
   }
 
   method finDelJuego(){

@@ -1,6 +1,6 @@
 import jugador.*
 import mundo.*
-
+import texto.*
 class Bloque{
   var property position
 
@@ -50,7 +50,7 @@ class BloqueCaible inherits Bloque{
 
 class Tierra inherits Bloque {
   
-  method image() = "tierra.png"
+  method image() = "dirt.png"
 }
 
 class Ladrillo inherits Bloque{
@@ -72,9 +72,8 @@ class Diamante inherits BloqueCaible{
 class Piedra inherits BloqueCaible {
   method image() = "piedra.png"
 
-  override method debeResbalar(objetosAbajo) {
-    return objetosAbajo.any({o => o.kindName() == "a Piedra" or o.kindName() == "a Ladrillo"})
-  }
+  override method debeResbalar(objetosAbajo) = objetosAbajo.any({o => o.kindName() == "a Piedra" or o.kindName() == "a Ladrillo"})
+  
 
   method intentarMover(dir) {
     const destino = dir.siguiente(position)
@@ -96,6 +95,7 @@ class Piedra inherits BloqueCaible {
           mundo.explotarEn(abajo)
           game.removeVisual(personaje)
           mundo.congelarJuego()
+          
         }
         enCaida = false
       } else {
