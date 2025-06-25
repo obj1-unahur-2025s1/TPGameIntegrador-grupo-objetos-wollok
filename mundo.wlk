@@ -12,7 +12,7 @@ object mundo {
   var property diamantesRequeridos = 0
   var property puertaAbierta = false
 
-  var property nivelActual = nivel1
+  var property nivelActual = nivel5
   var juegoActivo = true
 
   method juegoActivo() = juegoActivo 
