@@ -1,4 +1,4 @@
-Bouler Dash
+## BOULER DASH
 
 ## Instrucciones
 
@@ -8,14 +8,12 @@ El juego cuenta con 5 niveles.
 
 Para desplazarse por el tablero, el jugador debe usar las teclas/flechas de arriba, abajo, derecha e izquierda. Si pierde una vida, debe apretar la tecla ´r´ para reiniciar el nivel.
 
-![](bouler.png)
-
 ## Equipo de desarrollo
 
-- Maurin, Nicolas
-- Folco, Nicole
-- Duce, Brandon
-- Folco, Camila Belen
+Maurin, Nicolas
+Folco, Nicole
+Duce, Brandon
+Folco, Camila Belen
 
 - Programación con Objetos I | Universidad de Hurlingham
 - Versión de wollok 0.3.1
