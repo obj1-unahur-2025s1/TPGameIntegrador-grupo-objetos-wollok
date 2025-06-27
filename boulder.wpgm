@@ -6,7 +6,7 @@ import config.*
 import mundo.*
 program boulder {
 
-	game.title("prueba")
+	game.title("boulder")
 	
 	game.height(14)
 	game.width(30)

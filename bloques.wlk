@@ -5,6 +5,19 @@ class Bloque{
   var property position
 
   method esPersonaje() = false
+
+  //interaccion
+  method permitePasar() = false
+  method esDestructible() = false
+  method puedeSerEmpujado() = false
+  method recolectarSiCorresponde(){}
+  method esEntrable() = false
+  method resbala() = false
+
+  method desaparecer(){
+    game.removeVisual(self)
+  }
+
 }
 
 class BloqueCaible inherits Bloque{
@@ -51,38 +64,56 @@ class BloqueCaible inherits Bloque{
 class Tierra inherits Bloque {
   
   method image() = "dirt.png"
+
+  override method permitePasar() = true
+  override method esDestructible() = true
 }
 
 class Ladrillo inherits Bloque{
   method image() = "ladrillo.png"
+
+  override method resbala() = true
+
 }
 
 class Lava inherits Bloque {
     method image() = "lava.gif"
+
+    override method permitePasar() = true
 }
 
 
 class Puerta inherits Bloque {
   method image() = "puerta.png"
+
+  override method permitePasar() = true
+  override method esEntrable() = true
 }
 
 class Bomba inherits Bloque {
 
   method image() = "bomba1.gif"
+  override method permitePasar() = true
 }
 
 
 class Diamante inherits BloqueCaible{
   method image() = "diamante.png"
 
+  override method permitePasar() = true
+
   override method debeResbalar(objetosAbajo) = objetosAbajo.any({o => o.kindName() == "a Diamante"}) 
+  override method recolectarSiCorresponde(){
+    self.desaparecer()
+    mundo.recolectarDiamante()
+  }
 }
 
 class Piedra inherits BloqueCaible {
   method image() = "piedra.png"
 
-  override method debeResbalar(objetosAbajo) = objetosAbajo.any({o => o.kindName() == "a Piedra" or o.kindName() == "a Ladrillo"})
-  
+  override method debeResbalar(objetosAbajo) = objetosAbajo.any({o => o.resbala()})
+  override method resbala() = true
 
   method intentarMover(dir) {
     const destino = dir.siguiente(position)
@@ -102,7 +133,7 @@ class Piedra inherits BloqueCaible {
       } else if (objetosAbajo.any({o => o.esPersonaje()})) {
         if (enCaida) {
           mundo.explotarEn(abajo)
-          game.removeVisual(personaje)
+          personaje.desaparecer()
           mundo.congelarJuego()
           
         }
@@ -113,6 +144,8 @@ class Piedra inherits BloqueCaible {
       }
     }
   }
+
+  override method puedeSerEmpujado() = true
 }
 
 

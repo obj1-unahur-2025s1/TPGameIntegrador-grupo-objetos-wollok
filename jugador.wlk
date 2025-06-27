@@ -33,8 +33,8 @@ object personaje {
     const objetos = game.getObjectsIn(nuevaPosicion)
     var huboMovimiento = false 
 
-    if (objetos.any({o => o.kindName() == "a Piedra"})) {
-      const piedra = objetos.find({o => o.kindName() == "a Piedra"})
+    if (objetos.any({o => o.puedeSerEmpujado()})) {
+      const piedra = objetos.find({o => o.puedeSerEmpujado()})
 
       if (direccion.esIzquierda() or direccion.esDerecha()) {
         const posPiedraDestino = direccion.siguiente(piedra.position())
@@ -59,8 +59,8 @@ object personaje {
 }
 
   method eliminarTierraEn(pos) {
-    if(game.getObjectsIn(pos).any({o => o.kindName() == "a Tierra"})){
-      game.getObjectsIn(pos).filter({o => o.kindName() == "a Tierra"}).forEach({t => game.removeVisual(t)})
+    if(game.getObjectsIn(pos).any({o => o.esDestructible()})){
+      game.getObjectsIn(pos).filter({o => o.esDestructible()}).forEach({t => game.removeVisual(t)})
       romperTierra.play()
     }
     
@@ -69,19 +69,16 @@ object personaje {
   method esPosicionValida(pos) {
     return pos.x() >= 0 and pos.x() < 30 and pos.y() >= 0 and pos.y() < 14 and 
       game.getObjectsIn(pos).all({o => 
-        o.kindName() == "a Tierra" or o.kindName() == "a Diamante" or o.kindName() == "a Puerta" or o.kindName() == "a Bomba" or o.kindName() == "a Lava"
+        o.permitePasar()
       })
   }
 
   method recolectarSiHayDiamanteEn(pos) {
-    game.getObjectsIn(pos).filter({o => o.kindName() == "a Diamante"}).forEach({d =>
-      game.removeVisual(d)
-      mundo.recolectarDiamante()
-    })
+    game.getObjectsIn(pos).forEach({o => o.recolectarSiCorresponde()})
   }
 
   method pasarPorPuertaSiCorresponde(pos) {
-  if (mundo.puertaAbierta() and game.getObjectsIn(pos).any({o => o.kindName() == "a Puerta"} )) {
+  if (mundo.puertaAbierta() and game.getObjectsIn(pos).any({o => o.esEntrable()} )) {
     mundo.pasarDeNivel() 
     }
   }
@@ -98,8 +95,18 @@ object personaje {
       mundo.finDelJuego()
     } else {
     mundo.reiniciarNivel()
+    }
   }
-}
+  method esDestructible() = false
+  method permitePasar() = false
+  method recolectarSiCorresponde() = false
+  method puedeSerEmpujado() = false
+  method esEntrable() = false
+  method resbala() = false
+
+  method desaparecer(){
+    game.removeVisual(self)
+  }
 }
 
 
