@@ -72,7 +72,7 @@ object personaje {
 
   method pasarPorPuertaSiCorresponde(pos) {
   if (mundo.puertaAbierta() and game.getObjectsIn(pos).any({o => o.esEntrable()} )) {
-    mundo.pasarDeNivel() 
+    administradorDeNivel.pasarDeNivel() 
     }
   }
   
@@ -90,7 +90,7 @@ object personaje {
     if (vidas == 0) {
       mundo.finDelJuego()
     } else {
-    mundo.reiniciarNivel()
+    administradorDeNivel.reiniciarNivel()
     }
   }
   method esDestructible() = false

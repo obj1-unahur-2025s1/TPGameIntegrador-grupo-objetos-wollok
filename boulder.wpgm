@@ -15,7 +15,7 @@ program boulder {
 	game.addVisual(pantallaInicio)
 
 	keyboard.space().onPressDo({
-		mundo.iniciarJuego()
+		administradorDeNivel.iniciarJuego()
 	})
 
 	game.start()

@@ -19,6 +19,7 @@ class Bloque{
     game.removeVisual(self)
   }
   method afectarAlPersonaje(){}
+  method agregarAGravedadSiCorresponde(){}
 
 }
 
@@ -88,6 +89,7 @@ class Lava inherits Bloque {
       seQuemo.play()
       personaje.desaparecer()
       mundo.congelarJuego()
+      self.desaparecer()
   }
 }
 
@@ -124,6 +126,8 @@ class Diamante inherits BloqueCaible{
     self.desaparecer()
     mundo.recolectarDiamante()
   }
+
+  
 }
 
 class Piedra inherits BloqueCaible {

@@ -2,7 +2,7 @@ import jugador.*
 import mundo.*
 
 object pantallaInicio {
-  method image() = "pInicio.png"
+  method image() = "pantallainicio.png"
   method position() = game.at(0, 0)
   method width() = 30
   method height() = 14

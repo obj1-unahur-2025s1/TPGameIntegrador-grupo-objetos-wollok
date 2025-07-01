@@ -91,17 +91,11 @@ object mundo {
     juegoActivo = true
   }
 
-  method iniciarJuego() {
-  administradorDeNivel.iniciarJuego()
-}
+  
 
-  method reiniciarNivel() {
-    administradorDeNivel.reiniciarNivel()
-  }
+  
 
-  method pasarDeNivel() {
-    administradorDeNivel.pasarDeNivel()
-  }
+  
 
 
 

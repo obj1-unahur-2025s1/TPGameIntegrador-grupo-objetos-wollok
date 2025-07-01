@@ -1,4 +1,4 @@
-## BOULER DASH
+## BOULDER DASH
 
 ## Instrucciones
 
