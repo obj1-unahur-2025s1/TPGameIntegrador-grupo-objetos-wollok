@@ -36,16 +36,9 @@ object personaje {
     if (objetos.any({o => o.puedeSerEmpujado()})) {
       const piedra = objetos.find({o => o.puedeSerEmpujado()})
 
-      if (direccion.esIzquierda() or direccion.esDerecha()) {
-        const posPiedraDestino = direccion.siguiente(piedra.position())
-        
-
-      if (posPiedraDestino.y() < 14 and game.getObjectsIn(posPiedraDestino).isEmpty()) {
-        piedra.position(posPiedraDestino)
-        position = nuevaPosicion 
-        huboMovimiento = true
-      } 
-  }} 
+      direccion.intentarEmpujar(piedra)  
+    
+    } 
     else if (self.esPosicionValida(nuevaPosicion)) {
       position = nuevaPosicion
       self.eliminarTierraEn(nuevaPosicion)
@@ -82,8 +75,11 @@ object personaje {
     mundo.pasarDeNivel() 
     }
   }
-
-  method esPersonaje() = true
+  
+  method marcarMovimiento(){
+    estaEnMovimiento = true
+  }
+  method esControlado() = true
 
   method perderVida() {
     vidas -= 1
@@ -114,28 +110,38 @@ object personaje {
 object izquierda {
   method siguiente(pos) = pos.left(1)
 
-  method esIzquierda() = true
-  method esDerecha() = false
+  method intentarEmpujar(piedra){
+    const destino = self.siguiente(piedra.position())
+    if (piedra.puedeCaerEn(destino) and game.getObjectsIn(destino).isEmpty()) {
+      piedra.position(destino)
+      personaje.position(self.siguiente(personaje.position()))
+      personaje.marcarMovimiento()
+    }
+  }
 }
 
 object derecha {
   method siguiente(pos) = pos.right(1)
 
-  method esIzquierda() = false
-  method esDerecha() = true
+  method intentarEmpujar(piedra){
+    const destino = self.siguiente(piedra.position())
+    if (piedra.puedeCaerEn(destino) and game.getObjectsIn(destino).isEmpty()) {
+      piedra.position(destino)
+      personaje.position(self.siguiente(personaje.position()))
+      personaje.marcarMovimiento()
+    }
+  }
 }
 
 object arriba {
   method siguiente(pos) = pos.up(1)
 
-  method esIzquierda() = false
-  method esDerecha() = false
+  method intentarEmpujar(piedra){}
 }
 
 object abajo {
   method siguiente(pos) = pos.down(1)
 
-  method esIzquierda() = false
-  method esDerecha() = false
+  method intentarEmpujar(piedra){} 
 }
 

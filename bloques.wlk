@@ -1,10 +1,11 @@
 import jugador.*
 import mundo.*
 import texto.*
+import config.*
 class Bloque{
   var property position
 
-  method esPersonaje() = false
+  method esControlado() = false
 
   //interaccion
   method permitePasar() = false
@@ -17,17 +18,19 @@ class Bloque{
   method desaparecer(){
     game.removeVisual(self)
   }
+  method afectarAlPersonaje(){}
 
 }
 
 class BloqueCaible inherits Bloque{
   var enCaida = false
 
+  method puedeCaerEn(pos) = pos.y() < game.height()
   method caerSiPuede() {
     const abajo = position.down(1)
     const objetosAbajo = game.getObjectsIn(abajo)
 
-    if (abajo.y() < 14) {
+    if (self.puedeCaerEn(abajo)) {
       if (objetosAbajo.isEmpty()) {
         position = abajo
         enCaida = true
@@ -47,17 +50,18 @@ class BloqueCaible inherits Bloque{
     const derechaLado = position.right(1)
     const derechaAbajo = derechaLado.down(1)
 
-    const puedeResbalarIzq = izquierdaAbajo.y() < 14 and game.getObjectsIn(izquierdaLado).isEmpty() and game.getObjectsIn(izquierdaAbajo).isEmpty()
-
-    const puedeResbalarDer = derechaAbajo.y() < 14 and game.getObjectsIn(derechaLado).isEmpty() and game.getObjectsIn(derechaAbajo).isEmpty()
-
-    if (puedeResbalarIzq and !game.getObjectsIn(izquierdaAbajo).any({o => o.esPersonaje()}))
+    if (self.puedeResbalarALaIzquierda(izquierdaLado, izquierdaAbajo))
       position = izquierdaAbajo
-    else if (puedeResbalarDer and !game.getObjectsIn(derechaAbajo).any({o => o.esPersonaje()}))
+    else if (self.puedeResbalarALaDerecha(derechaLado,derechaAbajo) )
       position = derechaAbajo
 
     enCaida = true
   }
+
+  method puedeResbalarALaIzquierda(lado, abajo) = self.puedeCaerEn(abajo) and game.getObjectsIn(lado).isEmpty() and game.getObjectsIn(abajo).isEmpty() and not game.getObjectsIn(abajo).any({o => o.esControlado()})
+
+  method puedeResbalarALaDerecha(lado, abajo) = self.puedeCaerEn(abajo) and   game.getObjectsIn(lado).isEmpty() and   game.getObjectsIn(abajo).isEmpty() and   not game.getObjectsIn(abajo).any({o => o.esControlado()})
+
 }
 
 
@@ -80,6 +84,11 @@ class Lava inherits Bloque {
     method image() = "lava.gif"
 
     override method permitePasar() = true
+    override method afectarAlPersonaje() {
+      seQuemo.play()
+      personaje.desaparecer()
+      mundo.congelarJuego()
+  }
 }
 
 
@@ -94,6 +103,14 @@ class Bomba inherits Bloque {
 
   method image() = "bomba1.gif"
   override method permitePasar() = true
+
+  override method afectarAlPersonaje() {
+    explosion.play()
+    mundo.explotarEn(personaje.position())
+    self.desaparecer()
+    personaje.desaparecer()
+    mundo.congelarJuego()
+  }
 }
 
 
@@ -102,7 +119,7 @@ class Diamante inherits BloqueCaible{
 
   override method permitePasar() = true
 
-  override method debeResbalar(objetosAbajo) = objetosAbajo.any({o => o.kindName() == "a Diamante"}) 
+  override method debeResbalar(objetosAbajo) = objetosAbajo.any({o => o.resbala()}) 
   override method recolectarSiCorresponde(){
     self.desaparecer()
     mundo.recolectarDiamante()
@@ -114,23 +131,26 @@ class Piedra inherits BloqueCaible {
 
   override method debeResbalar(objetosAbajo) = objetosAbajo.any({o => o.resbala()})
   override method resbala() = true
+  override method puedeSerEmpujado() = true
 
   method intentarMover(dir) {
     const destino = dir.siguiente(position)
-    if (destino.y() < 14 and game.getObjectsIn(destino).isEmpty()) {
+    if (self.puedeCaerEn(destino) and game.getObjectsIn(destino).isEmpty()) {
       position = destino
     }
   }
+
+  
 
   override method caerSiPuede() {
     const abajo = position.down(1)
     const objetosAbajo = game.getObjectsIn(abajo)
 
-    if (abajo.y() < 14) {
+    if (self.puedeCaerEn(abajo)) {
       if (objetosAbajo.isEmpty()) {
         position = abajo
         enCaida = true
-      } else if (objetosAbajo.any({o => o.esPersonaje()})) {
+      } else if (objetosAbajo.any({o => o.esControlado()})) {
         if (enCaida) {
           mundo.explotarEn(abajo)
           personaje.desaparecer()
@@ -145,7 +165,7 @@ class Piedra inherits BloqueCaible {
     }
   }
 
-  override method puedeSerEmpujado() = true
+  
 }
 
 

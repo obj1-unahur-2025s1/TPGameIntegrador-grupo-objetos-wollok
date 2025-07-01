@@ -17,21 +17,11 @@ class Nivel {
     self.dibujarMapa()
     
     game.whenCollideDo(personaje, { v =>
-      if (v.kindName() == "a Lava") {
-        seQuemo.play()
-        game.removeVisual(personaje)
-        mundo.congelarJuego()
-      }
+      v.afectarAlPersonaje()
     })
 
     game.whenCollideDo(personaje, { b =>
-      if (b.kindName() == "a Bomba") {
-        explosion.play()
-        mundo.explotarEn(personaje.position())
-        game.removeVisual(b) 
-        game.removeVisual(personaje)
-        mundo.congelarJuego()
-      }
+      b.afectarAlPersonaje()
     })
   }
 
@@ -42,6 +32,7 @@ class Nivel {
       var x = 0
       fila.forEach({celda =>
         celda.decode(x, y)
+            
         x += 1
       })
       y -= 1

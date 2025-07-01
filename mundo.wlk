@@ -18,7 +18,7 @@ object progreso{
 }
 
 object administradorDeNivel{
-  var property nivelActual = nivel4
+  var property nivelActual = nivel1
 
   method iniciarJuego(){
     if (nivelActual == null) {
