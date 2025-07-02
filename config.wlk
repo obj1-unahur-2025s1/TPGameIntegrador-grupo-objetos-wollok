@@ -11,6 +11,11 @@ object config {
   }
 }
 
+object musicaDeFondo{
+  method play(){
+    game.sound("musica.mp3").play()
+  }
+}
 
 object romperTierra{
   method play(){

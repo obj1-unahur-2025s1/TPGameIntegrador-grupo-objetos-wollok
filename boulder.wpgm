@@ -4,6 +4,7 @@ import niveles.*
 import texto.*
 import config.*
 import mundo.*
+
 program boulder {
 
 	game.title("boulder")
@@ -14,7 +15,14 @@ program boulder {
 
 	game.addVisual(pantallaInicio)
 
+	musicaDeFondo.play() 
+
 	keyboard.space().onPressDo({
+        game.addVisual(instrucciones)
+        instrucciones.elementos()
+    })
+
+	keyboard.enter().onPressDo({
 		administradorDeNivel.iniciarJuego()
 	})
 
